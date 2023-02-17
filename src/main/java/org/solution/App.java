@@ -105,14 +105,19 @@ public class App
                 for (int index : referenceIndex) {
                  tableMapValue.remove(index);
                 }
+                //add reference tag to the end of list
                 for ( List<String> referenceList : tempReferenceList) {
                  tableMapValute.add(referenceList);
                 }
                 tableMapValue = validateIdOrder(tableMapValue);
                 tableMap.put(tableName,tableMapValue);
             }
-         //make mapping data XML
-         
+         //sort
+         tableList sorting 
+         // mapping to XML
+          mapping to XML_String
+          //write to text file
+          inputStream and write to text file
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
