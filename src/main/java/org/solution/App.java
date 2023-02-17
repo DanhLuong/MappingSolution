@@ -56,7 +56,7 @@ public class App
                 List<List<String>> tableMapValue = new ArrayList<>();
                 while (rs.next()) {
                     List<String> tempColumnList = new ArrayList<>();
-                    //normal tag:
+                    //normal attribute tag:
                     //index=0->tag
                     tempColumnList.add(columnNameToTag(rs.getString(1)));
                     //index=1->name
@@ -72,31 +72,52 @@ public class App
                 //querry table reference
                 String tempSql2=sqlGetReference+tableName+"'";
                 rs=stm.executeQuery(tempSql2);
+                List<List<String>> tempReferenceListList = new ArrayList<>();
                 List<String> tempReferenceList = new ArrayList<>();
                 while (rs.next()) {
                     //reference tag:
                     tempReferenceList.add(rs.getString("reference" ));
                     //column name
-                    tempReferenceList.add(rs.getString(2 ));
+                    tempReferenceList.add(rs.getString(2));
                     //foreign table
                     tempReferenceList.add(rs.getString(3));
                     //foreign column
                     tempReferenceList.add(rs.getString(4));
+                    tempReferenceListList.add(tempReferenceList);
                 }
-                //replace id/reference
+                List<Integer> referenceIndex = new Array<>();
+                //replace contribute -> id tag
                 for (List<String> columnList : tableMapValue) {
                     if(columnList.get(1).equals(id)) {
                         columnList.set(0,"id");
-                    } else (columnList.get(1).equals(tempReferenceList.get(2)))
-
+                    }
+                }
+             //replace contribute -> reference tag
+                for ( List<String> referenceList : tempReferenceList) {
+                  for ( int =tableMapValue.size()-1;i=0;i--) {
+                   if(tableMapValue.get(i)==referenceList.get(1)) {
+                      referenceIndex.add(i);
+                      break;
+                   }
+                  }
+                }
+                //remove attribute->reference
+                for (int index : referenceIndex) {
+                 tableMapValue.remove(index);
+                }
+                //add reference tag to the end of list
+                for ( List<String> referenceList : tempReferenceList) {
+                 tableMapValute.add(referenceList);
                 }
                 tableMapValue = validateIdOrder(tableMapValue);
-                //validate table reference
-
                 tableMap.put(tableName,tableMapValue);
-
             }
-            //make mapping data XML
+         //sort
+         tableList sorting 
+         // mapping to XML
+          mapping to XML_String
+          //write to text file
+          inputStream and write to text file
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
