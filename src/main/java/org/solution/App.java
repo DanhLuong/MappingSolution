@@ -12,7 +12,7 @@ import static org.solution.Utils.*;
 Mapping Solution
  Step:
  1.querry list of table / columns / id + reference each table (for validate columns to right format for mapping to XML)
- 2.mapping to table list, reference list (for sorting), tableMap(map to XML)
+ 2.mapping to table list, referencedist (for sorting), tableMap(map to XML)
  3.sorting according referencedList
  4.mapping tableMap to String
  5.String write to BeneratorXML.txt
@@ -50,7 +50,7 @@ public class App
             //query table list
             rs=stm.executeQuery(sqlGetTableList);
             while (rs.next()) {
-                tableList.add(rs.getString(1));
+                tableList.add(rs.getString("table_name"));
             }
             //+make HashMap of Mapping Data
             for (String tableName : tableList) {
@@ -67,11 +67,11 @@ public class App
                     List<String> tempColumnList = new ArrayList<>();
                     //normal attribute tag:
                     //index=0->tag
-                    tempColumnList.add(columnNameToTag(rs.getString(1)));
+                    tempColumnList.add(columnNameToTag(rs.getString("column_name")));
                     //index=1->name
-                    tempColumnList.add(rs.getString(1));
+                    tempColumnList.add(rs.getString("column_name"));
                     //index=2->data_type
-                    tempColumnList.add(columnTypeDBConvert(rs.getString(2)));
+                    tempColumnList.add(columnTypeDBConvert(rs.getString("data_type")));
                     tableMapValue.add(tempColumnList);
                 }
                 //query table id, simple case only 1 id per table (assumed)
@@ -79,7 +79,7 @@ public class App
                 String id="";
                 rs=stm.executeQuery(tempSql1);
                 while(rs.next()) {
-                    id = rs.getString(1);
+                    id = rs.getString("column_name");
                 }
                 //query table reference
                 String tempSql2=sqlGetReference+tableName+"'";
@@ -90,11 +90,11 @@ public class App
                     //index=0->"reference" tag
                     tempReferenceList.add("reference");
                     //index=1->column name
-                    tempReferenceList.add(rs.getString(2));
+                    tempReferenceList.add(rs.getString("column_name"));
                     //index=2->foreign table name
-                    tempReferenceList.add(rs.getString(3));
+                    tempReferenceList.add(rs.getString("foreign_table_name"));
                     //index=3->foreign column name
-                    tempReferenceList.add(rs.getString(4));
+                    tempReferenceList.add(rs.getString("foreign_column_name"));
                     tempReferenceListList.add(tempReferenceList);
                 }
                 //++validate and replace attribute -> id tag
@@ -146,8 +146,8 @@ public class App
         //5.Write to text file
         try {
             //change path to where you want to get the txt file
-            Path path
-                    = Paths.get("C:\\Users\\Danh\\Desktop\\BeneratorXML.txt");
+            String customPath = Paths.get(".").toAbsolutePath().normalize().toString();
+            Path path= Paths.get(customPath+"\\BeneratorXML.txt");
             Files.writeString(path, resultXML);
         }
         catch (IOException ex) {

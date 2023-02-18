@@ -1,0 +1,83 @@
+<generate type="db_role">
+	<id name="name" type="string"/>
+</generate>
+<generate type="db_category">
+	<id name="id" type="string"/>
+	<encrypt name="name" type="string"/>
+	<reference name="parent_id" selector="select id from db_category" distribution="random"/>
+</generate>
+<generate type="db_customer">
+	<id name="id" type="int"/>
+	<attribute name="category" type="string"/>
+</generate>
+<generate type="db_order">
+	<id name="id" type="int"/>
+	<attribute name="total_price" type="double"/>
+	<attribute name="created_at" type="timestamp"/>
+	<reference name="customer_id" selector="select id from db_customer" distribution="random"/>
+</generate>
+<generate type="db_user">
+	<id name="id" type="int"/>
+	<encrypt name="user_name" type="string"/>
+	<encrypt name="email" type="string"/>
+	<hash name="password" type="string"/>
+	<attribute name="active" type="short"/>
+	<reference name="role_id" selector="select name from db_role" distribution="random"/>
+	<reference name="customer_id" selector="select id from db_customer" distribution="random"/>
+</generate>
+<generate type="db_product">
+	<id name="ean_code" type="string"/>
+	<encrypt name="name" type="string"/>
+	<attribute name="price" type="double"/>
+	<attribute name="manufacturer" type="string"/>
+	<attribute name="notes" type="string"/>
+	<attribute name="description" type="string"/>
+	<reference name="category_id" selector="select id from db_category" distribution="random"/>
+</generate>
+<generate type="db_customer_contact">
+	<id name="id" type="int"/>
+	<attribute name="main" type="boolean"/>
+	<attribute name="salutation" type="string"/>
+	<encrypt name="first_name" type="string"/>
+	<encrypt name="last_name" type="string"/>
+	<attribute name="birth_date" type="date"/>
+	<reference name="customer_id" selector="select id from db_customer" distribution="random"/>
+</generate>
+<generate type="db_customer_payment_details">
+	<id name="id" type="int"/>
+	<attribute name="main" type="boolean"/>
+	<attribute name="type" type="string"/>
+	<attribute name="number" type="string"/>
+	<reference name="customer_id" selector="select id from db_customer" distribution="random"/>
+</generate>
+<generate type="db_order_item">
+	<id name="id" type="int"/>
+	<attribute name="number_of_items" type="int"/>
+	<attribute name="product_ean_code" type="string"/>
+	<reference name="order_id" selector="select id from db_order" distribution="random"/>
+	<reference name="product_ean_code" selector="select ean_code from db_product" distribution="random"/>
+</generate>
+<generate type="db_user_address">
+	<id name="id" type="int"/>
+	<attribute name="main" type="boolean"/>
+	<attribute name="street" type="string"/>
+	<attribute name="house_number" type="string"/>
+	<attribute name="zip_code" type="string"/>
+	<attribute name="city" type="string"/>
+	<attribute name="country" type="string"/>
+	<reference name="user_id" selector="select id from db_user" distribution="random"/>
+</generate>
+<generate type="db_user_contact">
+	<id name="id" type="int"/>
+	<attribute name="main" type="boolean"/>
+	<attribute name="salutation" type="string"/>
+	<encrypt name="first_name" type="string"/>
+	<encrypt name="last_name" type="string"/>
+	<attribute name="birth_date" type="date"/>
+	<reference name="user_id" selector="select id from db_user" distribution="random"/>
+</generate>
+<generate type="db_product_image">
+	<id name="id" type="int"/>
+	<attribute name="image" type="string"/>
+	<reference name="product_ean" selector="select ean_code from db_product" distribution="random"/>
+</generate>
