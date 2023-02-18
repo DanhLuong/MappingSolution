@@ -1,6 +1,8 @@
 package org.solution;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Utils {
     public static String columnNameToTag(String columnName) {
@@ -72,8 +74,51 @@ public class Utils {
     }
     public static List<List<String>> validateIdOrder(List<List<String>> input) {
         List<List<String>> output = input;
-        //Normally id on top. In general case, maybe need to re-arrange id to top of list_can expand later
+        //Normally id on top. In general case, maybe need to re-arrange id to top of list_can update later
         return output;
     }
 
+    public static List<String> ReferencedMustBeInAdvanceSort(List<List<String>> input) {
+        List<String> output = new ArrayList<>();
+        while (!input.isEmpty()) {
+            List<Integer>  removedIndex = new ArrayList<>();
+            for (int i= input.size()-1;i>=0;i--) {
+                for (int k=1;k<input.get(i).size();k++) {
+                    if(input.get(i).get(k).equals("none")||output.contains(input.get(i).get(k))) {
+                        removedIndex.add(i);
+                        output.add(input.get(i).get(0));
+                        break;
+                    }
+                }
+            }
+            //delete item in input
+            for(int j=0;j<removedIndex.size();j++) {
+                input.remove(removedIndex.get(j).intValue());
+            }
+        }
+        System.out.println(output);
+        return output;
+    }
+
+    public static String CustomMapToXML(List<String> orderedList, Map<String, List<List<String>>> tableMap) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String tableName : orderedList) {
+            List<List<String>> tableMeta = tableMap.get(tableName);
+            stringBuilder.append("<generate type=\""+tableName+"\">\n");
+            for (List<String> columnMeta : tableMeta) {
+                stringBuilder.append(CustomListToXMLTag(columnMeta));
+            }
+            stringBuilder.append("</generate>\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String CustomListToXMLTag(List<String> list) {
+        switch (list.get(0)) {
+            case "reference":
+                return "\t<reference name=\""+ list.get(1)+"\" selector=\"select"+ list.get(3)+" from "+ list.get(2)+"\" distribution=\"random\"/>\n";
+            default:
+                return "\t<"+list.get(0)+" name=\""+list.get(1)+"\" type=\""+list.get(2)+"\"/>\n";
+        }
+    }
 }
