@@ -24,13 +24,15 @@ public class Utils {
     public static String columnTypeDBConvert(String columnType) {
         String checkString = columnType.toUpperCase();
         switch (checkString) {
+            //character varying
             case "VARCHAR":
                 return "string";
             case "VARBINARY":
                 return "binary";
             case "TINYINT":
                 return "byte";
-            case "TIMESTAMP":
+                //change "timestamp" to "timestamp without time zone"
+            case "TIMESTAMP WITHOUT TIME ZONE":
                 return "timestamp";
             case "TIME":
                 return "date";
@@ -116,7 +118,7 @@ public class Utils {
     public static String CustomListToXMLTag(List<String> list) {
         switch (list.get(0)) {
             case "reference":
-                return "\t<reference name=\""+ list.get(1)+"\" selector=\"select"+ list.get(3)+" from "+ list.get(2)+"\" distribution=\"random\"/>\n";
+                return "\t<reference name=\""+ list.get(1)+"\" selector=\"select "+ list.get(3)+" from "+ list.get(2)+"\" distribution=\"random\"/>\n";
             default:
                 return "\t<"+list.get(0)+" name=\""+list.get(1)+"\" type=\""+list.get(2)+"\"/>\n";
         }

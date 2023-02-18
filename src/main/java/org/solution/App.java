@@ -13,10 +13,9 @@ Mapping Solution
  Step:
  1.querry list of table / columns / id + reference each table (for validate columns to right format for mapping to XML)
  2.mapping to table list, reference list (for sorting), tableMap(map to XML)
- 3.sorting according reference list
+ 3.sorting according referencedList
  4.mapping tableMap to String
  5.String write to BeneratorXML.txt
-
  */
 public class App 
 {
@@ -133,18 +132,20 @@ public class App
                  tableMapValue.add(referenceList);
                 }
                 //validate ID order -> take it to top list
+                //2
                 tableMapValue = validateIdOrder(tableMapValue);
                 tableMap.put(tableName,tableMapValue);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        //sort
+        //3.sort
         List<String> orderedList = ReferencedMustBeInAdvanceSort(referencedList);
-        // mapping to XML String
+        //4.mapping to XML String
         String resultXML = CustomMapToXML(orderedList, tableMap);
-        // Write to text file
+        //5.Write to text file
         try {
+            //change path to where you want to get the txt file
             Path path
                     = Paths.get("C:\\Users\\Danh\\Desktop\\BeneratorXML.txt");
             Files.writeString(path, resultXML);
@@ -153,7 +154,4 @@ public class App
             System.out.print("Cannot Write Text File");
         }
     }
-
-
-
 }
