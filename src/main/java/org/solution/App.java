@@ -147,7 +147,7 @@ public class App
         try {
             //change path to where you want to get the txt file
             String customPath = Paths.get(".").toAbsolutePath().normalize().toString();
-            Path path= Paths.get(customPath+"\\BeneratorXML.txt");
+            Path path= Paths.get(customPath,"BeneratorXML.txt");
             Files.writeString(path, resultXML);
         }
         catch (IOException ex) {
